@@ -561,7 +561,11 @@
 </code></pre></div>
 
 <p>该函数的四个参数均对应<a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#responseObject"> OpenAPI 规范</a>里的同名字段。<code>status</code> 则为该 Response Object 对应的 HTTP 状态码。</p>
-<p>除了 <code>describe_response</code> 描述单个响应状态码以外，你还可以使用 <code>describe_responses</code> 对状态码批量的描述。</p>
+<div class="admonition notice">
+<p class="admonition-title">Notice</p>
+<p>如果 <code>description</code> 的值为默认的 <code>""</code>，则会使用 <code>http</code> 标准库中的 <code>HTTPStatus(status).description</code> 作为默认的描述。</p>
+</div>
+<p>除了 <code>describe_response</code> 描述单个响应状态码以外，你还可以使用 <code>describe_responses</code> 对状态码批量的描述。字典以 <code>status</code> 为键，以 OpenAPI Response Object 的四个属性作为可选的值（其中 <code>description</code> 为必选）。</p>
 <div class="codehilite"><pre><span></span><code><span class="n">RESPONSES</span> <span class="o">=</span> <span class="p">{</span>
     <span class="mi">404</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Item not found&quot;</span><span class="p">},</span>
     <span class="mi">403</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Not enough privileges&quot;</span><span class="p">},</span>
