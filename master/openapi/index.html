@@ -517,7 +517,7 @@
                 
                 <p>Index 使用 <a href="https://pydantic-docs.helpmanual.io/">pydantic</a> 用于更轻松的解析 HTTP 请求信息，并为之绑定了一套生成 OpenAPI 文档的程序。</p>
 <h2 id="openapi">显示 OpenAPI 文档</h2>
-<p>将 <code>indexpy.openapi.application.OpenAPI</code> 挂载进 index 中。</p>
+<p>将 <code>indexpy.openapi.application.OpenAPI</code> 挂载进 index 中。启动 index，访问你服务上 <code>/openapi/</code> 即可看到生成的文档。</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">indexpy</span> <span class="kn">import</span> <span class="n">Index</span>
 <span class="kn">from</span> <span class="nn">indexpy.routing</span> <span class="kn">import</span> <span class="n">SubRoutes</span>
 <span class="kn">from</span> <span class="nn">indexpy.openapi</span> <span class="kn">import</span> <span class="n">OpenAPI</span>
@@ -525,11 +525,16 @@
 <span class="n">app</span> <span class="o">=</span> <span class="n">Index</span><span class="p">()</span>
 
 <span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
-    <span class="n">SubRoutes</span><span class="p">(</span><span class="s2">&quot;/openapi&quot;</span><span class="p">,</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="s2">&quot;Title&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;1.0&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">routes</span><span class="p">)</span>
+    <span class="n">SubRoutes</span><span class="p">(</span>
+        <span class="s2">&quot;/openapi&quot;</span><span class="p">,</span>
+        <span class="n">OpenAPI</span><span class="p">(</span><span class="s2">&quot;Title&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;1.0&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">routes</span><span class="p">,</span>
+        <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;openapi&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
 <span class="p">)</span>
 </code></pre></div>
 
-<p>启动 index，访问你服务上 <code>/openapi/</code> 即可看到生成的文档。</p>
+<p>默认的文档模板使用 <a href="https://swagger.io/tools/swagger-ui/">swagger</a>，如果你更喜欢 <a href="https://github.com/Redocly/redoc">redoc</a> 的样式，可以通过更改 <code>template_name</code> 来达到目的，例如：<code>OpenAPI(..., template_name="redoc")</code>。</p>
+<p>不仅如此，你还可以通过使用 <code>template</code> 参数来控制显示自己的喜欢的任何模板，只需要把模板的完整内容作为字符串传给 <code>template</code> 参数即可。</p>
 <h2 id="_1">接口描述</h2>
 <p>对于所有可处理 HTTP 请求的方法，它们的 <code>__doc__</code> 都会用于生成 OpenAPI 文档。</p>
 <p>第一行将被当作概要描述，所以尽量简明扼要，不要太长。</p>
