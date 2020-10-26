@@ -377,27 +377,27 @@
         
           <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
-    请求
+    描述请求参数
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
-    响应
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    样例
+    描述响应结果
   </a>
   
 </li>
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#openapi_1" class="md-nav__link">
+    描述额外的 OpenAPI 文档
+  </a>
   
 </li>
       
@@ -465,27 +465,27 @@
         
           <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
-    请求
+    描述请求参数
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
-    响应
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    样例
+    描述响应结果
   </a>
   
 </li>
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#openapi_1" class="md-nav__link">
+    描述额外的 OpenAPI 文档
+  </a>
   
 </li>
       
@@ -515,7 +515,7 @@
                 
                   <h1>OpenAPI</h1>
                 
-                <p>Index 使用 <a href="https://pydantic-docs.helpmanual.io/">pydantic</a> 用于更轻松的解析 HTTP 请求信息，并为之绑定了一套生成 OpenAPI 文档的程序。这与 Index 核心并不是强耦合的，所以你可以选择使用，也可以选择不使用。</p>
+                <p>Index 使用 <a href="https://pydantic-docs.helpmanual.io/">pydantic</a> 用于更轻松的解析 HTTP 请求信息，并为之绑定了一套生成 OpenAPI 文档的程序。</p>
 <h2 id="openapi">显示 OpenAPI 文档</h2>
 <p>将 <code>indexpy.openapi.application.OpenAPI</code> 挂载进 index 中。</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">indexpy</span> <span class="kn">import</span> <span class="n">Index</span>
@@ -545,28 +545,43 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 </code></pre></div>
 
-<h3 id="_2">请求</h3>
-<p>对于所有可处理 HTTP 请求的方法，均可以接受五种参数：<code>path</code>、<code>body</code>、<code>query</code>、<code>header</code>、<code>cookie</code>。</p>
-<p>使用继承自 <code>pydantic.BaseModel</code> 的类作为类型注解即可做到自动参数校验以及生成请求格式文档。</p>
-<h3 id="_3">响应</h3>
-<p>为了描述不同状态码的响应结果，Index 使用装饰器描述，而不是类型注解。既可以使用 models 描述响应(仅支持 application/json)，亦可以直接传递符合 OpenAPI 文档的 Dict（当你描述返回一个非 application/json 类型的响应时这很有用）。</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">describe_response</span><span class="p">(</span>
-    <span class="n">status</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">HTTPStatus</span><span class="p">],</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="o">*</span><span class="p">,</span>
-    <span class="n">content</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">],</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">links</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span>
+<h3 id="_2">描述请求参数</h3>
+<p>对于所有可处理 HTTP 请求的方法，均可以接受五种参数：<code>path</code>、<code>body</code>、<code>query</code>、<code>header</code>、<code>cookie</code>。使用继承自 <code>pydantic.BaseModel</code> 的类作为类型注解即可做到自动参数校验以及生成请求格式文档。例如：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+
+
+<span class="k">class</span> <span class="nc">PageQuery</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">page_num</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">page_size</span><span class="p">:</span> <span class="nb">int</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">getlist</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">PageQuery</span><span class="p">):</span>
+    <span class="o">...</span>
 </code></pre></div>
 
-<p>该函数的四个参数均对应<a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#responseObject"> OpenAPI 规范</a>里的同名字段。<code>status</code> 则为该 Response Object 对应的 HTTP 状态码。</p>
+<h3 id="_3">描述响应结果</h3>
+<p>为了描述不同状态码的响应结果，Index 使用装饰器描述，而不是类型注解。<code>describe_response</code> 接受五个参数，其中 <code>status</code> 为必需项，<code>description</code>、<code>content</code>、<code>headers</code> 和 <code>links</code> 为可选项，对应<a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#responseObject"> OpenAPI Specification </a>里的同名字段。</p>
+<p>其中，<code>content</code> 既可以使用 <code>pydantic.BaseModel</code> 描述响应(仅支持 application/json)，亦可以直接传递符合 OpenAPI 文档的 Dict（当你描述返回一个非 application/json 类型的响应时这很有用）。</p>
 <div class="admonition notice">
 <p class="admonition-title">Notice</p>
-<p>如果 <code>description</code> 的值为默认的 <code>""</code>，则会使用 <code>http</code> 标准库中的 <code>HTTPStatus(status).description</code> 作为默认的描述。</p>
+<p>如果 <code>description</code> 的值为默认的 <code>""</code>，则会使用 <code>http</code> 标准库中的 <code>HTTPStatus(status).description</code> 作为描述。</p>
 </div>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">http</span> <span class="kn">import</span> <span class="n">HTTPStatus</span>
+
+<span class="kn">from</span> <span class="nn">indexpy.openapi</span> <span class="kn">import</span> <span class="n">describe_response</span>
+
+
+<span class="nd">@describe_response</span><span class="p">(</span><span class="n">HTTPStatus</span><span class="o">.</span><span class="n">NO_CONTENT</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    .................</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</code></pre></div>
+
 <p>除了 <code>describe_response</code> 描述单个响应状态码以外，你还可以使用 <code>describe_responses</code> 对状态码批量的描述。字典以 <code>status</code> 为键，以 OpenAPI Response Object 的四个属性作为可选的值（其中 <code>description</code> 为必选）。</p>
-<div class="codehilite"><pre><span></span><code><span class="n">RESPONSES</span> <span class="o">=</span> <span class="p">{</span>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">indexpy.openapi</span> <span class="kn">import</span> <span class="n">describe_responses</span>
+
+<span class="n">RESPONSES</span> <span class="o">=</span> <span class="p">{</span>
     <span class="mi">404</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Item not found&quot;</span><span class="p">},</span>
     <span class="mi">403</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Not enough privileges&quot;</span><span class="p">},</span>
     <span class="mi">302</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The item was moved&quot;</span><span class="p">},</span>
@@ -585,49 +600,32 @@
 <p class="admonition-title">Notice</p>
 <p>此功能到目前为止，除生成OpenAPI文档的作用外，无其他作用。<strong>未来或许会增加 mock 功能。</strong></p>
 </div>
-<h3 id="_4">样例</h3>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">indexpy.http</span> <span class="kn">import</span> <span class="n">HTTPView</span>
-<span class="kn">from</span> <span class="nn">indexpy.openapi</span> <span class="kn">import</span> <span class="n">describe_response</span>
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
-
-
-<span class="k">class</span> <span class="nc">Hello</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Aber&quot;</span>
-
-
-<span class="k">class</span> <span class="nc">Message</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;your message&quot;&quot;&quot;</span>
-
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;your name&quot;</span><span class="p">)</span>
-    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;what are you want to say?&quot;</span><span class="p">)</span>
-
-
-<span class="k">class</span> <span class="nc">MessageResponse</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;message response&quot;&quot;&quot;</span>
-
-    <span class="n">message</span><span class="p">:</span> <span class="n">Message</span>
-
-
-<span class="k">class</span> <span class="nc">HTTP</span><span class="p">(</span><span class="n">HTTPView</span><span class="p">):</span>
-    <span class="nd">@describe_response</span><span class="p">(</span>
-        <span class="mi">200</span><span class="p">,</span>
-        <span class="n">content</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;text/html&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">}}},</span>
+<h2 id="openapi_1">描述额外的 OpenAPI 文档</h2>
+<p>作为一个 Web 项目，在中间件中读取请求信息并作限制是很常见的，例如读取 JWT 用作鉴权。在每个视图都增加 <code>header</code> 参数是不现实的，这时候 <code>describe_extra_docs</code> 就派上用场了。</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><code>describe_extra_docs</code> 增加的内容，不仅限于 <code>parameters</code>，任何描述都会被合并进原本的文档里。具体的字段可参考 <a href="https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#operationObject">OpenAPI Specification</a>。</p>
+</div>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">judge_jwt</span><span class="p">(</span><span class="n">endpoint</span><span class="p">):</span>
+    <span class="n">describe_extra_docs</span><span class="p">(</span>
+        <span class="n">endpoint</span><span class="p">,</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Authorization&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;in&quot;</span><span class="p">:</span> <span class="s2">&quot;header&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;JWT Token&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">},</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">},</span>
     <span class="p">)</span>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">Hello</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        welcome page</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;welcome, </span><span class="si">{</span><span class="n">query</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.&quot;</span>
 
-    <span class="nd">@describe_response</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">MessageResponse</span><span class="p">)</span>
-    <span class="nd">@describe_response</span><span class="p">(</span><span class="mi">201</span><span class="p">)</span>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">Message</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        echo your message</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">judge</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+        <span class="o">...</span>
 
-<span class="sd">        just echo your message.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">body</span><span class="o">.</span><span class="n">dict</span><span class="p">()},</span> <span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;server&quot;</span><span class="p">:</span> <span class="s2">&quot;index.py&quot;</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">judge</span>
 </code></pre></div>
 
 <h2 id="tags">Tags</h2>
@@ -642,8 +640,14 @@
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;test over two tags in one path&quot;</span><span class="p">,</span>
             <span class="s2">&quot;paths&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/about/&quot;</span><span class="p">,</span> <span class="s2">&quot;/file&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">],</span>
         <span class="p">},</span>
-        <span class="s2">&quot;about&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;about page&quot;</span><span class="p">,</span> <span class="s2">&quot;paths&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/about/&quot;</span><span class="p">,</span> <span class="s2">&quot;/about/me&quot;</span><span class="p">]},</span>
-        <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;get/upload file api&quot;</span><span class="p">,</span> <span class="s2">&quot;paths&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/file&quot;</span><span class="p">]},</span>
+        <span class="s2">&quot;about&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;about page&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;paths&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/about/&quot;</span><span class="p">,</span> <span class="s2">&quot;/about/me&quot;</span><span class="p">],</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;get/upload file api&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;paths&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;/file&quot;</span><span class="p">],</span>
+        <span class="p">},</span>
     <span class="p">},</span>
 <span class="p">)</span>
 </code></pre></div>
